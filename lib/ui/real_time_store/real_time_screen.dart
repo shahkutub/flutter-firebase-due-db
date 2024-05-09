@@ -12,6 +12,7 @@ import 'package:flutter_firebase/ui/firestore/firestore_list_screen.dart';
 import 'package:flutter_firebase/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../widgets/round_button.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -149,9 +150,14 @@ class _HomePostState extends State<HomePost> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(image),
-                          radius: 20,
+                        leading: InkWell(
+                          onTap: (){
+                            showVawcharDialog(image);
+                          },
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(image),
+                            radius: 20,
+                          ),
                         ),
                         trailing: PopupMenuButton(
                             icon: Icon(Icons.more_vert),
@@ -188,10 +194,27 @@ class _HomePostState extends State<HomePost> {
                                     ),
                                   )
                                 ]),
-                        title:
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text('${snapshot.child('name').value.toString()}'),
-                        subtitle:
-                            Text(snapshot.child("mobile").value.toString()),
+                            Text('গ্রামঃ '+snapshot.child("village").value.toString()),
+                            Row(
+                              children: [
+                                Text('মোবাইল নং: '+snapshot.child("mobile").value.toString()+'  '),
+                                InkWell(child: Icon(Icons.phone_enabled),onTap: (){
+                                  launchUrlString("tel://${snapshot.child("mobile").value.toString()}");
+                                },)
+                              ],
+                            ),
+                            Text('বাকি টাকা: '+snapshot.child("duetotal").value.toString()),
+                            Text('বাকির তারিখ: ${snapshot.child('date').value.toString()}'),
+                            Text('জামিনদার: ${snapshot.child('jamindarname').value.toString()}'),
+                            Text('মোবাইল নং: ${snapshot.child('jamindarmobile').value.toString()}'),
+                          ],
+                        ),
+                        // subtitle:
+                        //     Text(snapshot.child("mobile").value.toString()),
                       ),
                     ),
                   );
@@ -202,10 +225,25 @@ class _HomePostState extends State<HomePost> {
                     sizeFactor: animation,
                     child: ListTile(
                       iconColor: Colors.red,
-                      title:
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text('${snapshot.child('name').value.toString()}'),
-                      subtitle:
-                          Text(snapshot.child("mobile").value.toString()),
+                          Text('গ্রামঃ '+snapshot.child("village").value.toString()),
+                          Row(
+                            children: [
+                              Text('মোবাইল নং: '+snapshot.child("mobile").value.toString()+'  '),
+                              InkWell(child: Icon(Icons.phone_enabled),onTap: (){
+                                launchUrlString("tel://${snapshot.child("mobile").value.toString()}");
+                              },)
+                            ],
+                          ),
+                          Text('বাকি টাকা: '+snapshot.child("duetotal").value.toString()),
+                          Text('বাকির তারিখ: ${snapshot.child('date').value.toString()}'),
+                          Text('জামিনদার: ${snapshot.child('jamindarname').value.toString()}'),
+                          Text('মোবাইল নং: ${snapshot.child('jamindarmobile').value.toString()}'),
+                        ],
+                      ),
                     ),
                   );
                 } else {
@@ -453,6 +491,9 @@ class _HomePostState extends State<HomePost> {
                                       'payhistory': '${payhistoryy}',
                                       //'image': newUrl.toString()
                                     }).then((value) {
+                                      _payTextController.text = '';
+                                      _dueTextController.text = '';
+
                                       Utils().toastMessage("Post Update");
                                       Navigator.pop(context);
                                     }).onError((error, stackTrace) {
@@ -472,272 +513,33 @@ class _HomePostState extends State<HomePost> {
               ),
             ),
           );
-          return SingleChildScrollView(
-            child: AlertDialog(
-              title: Center(child: Text("Update Post")),
-              content: Container(
-                height: height,
-                width: width*5,
-                child: Column(
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          TextFormField(
-                            // maxLines: 2,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Enter Text";
-                              } else {
-                                return null;
-                              }
-                            },
-                            controller: _initialdueTextController,
-                            decoration: InputDecoration(
-                              //enabled: false,
-                              hintText: '',
-                              labelText: 'শুরুর বাকি',
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 20.0),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.green, width: 1.0),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            keyboardType: TextInputType.multiline,
-                            maxLines: 5,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Enter Text";
-                              } else {
-                                return null;
-                              }
-                            },
-                            controller: _duepayinfoTextController,
-                            decoration: InputDecoration(
-                              //enabled: false,
-                              hintText: '',
-                              labelText: 'বাকি প্রদান তথ্য',
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10.0, horizontal: 10.0),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 1.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                           // maxLines: 2,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Enter Text";
-                              } else {
-                                return null;
-                              }
-                            },
-                            controller: _dueTextController,
-                            decoration: InputDecoration(
-                              //enabled: false,
-                              hintText: '',
-                              labelText: 'বর্তমান বাকি টাকা',
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 20.0),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 1.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                          ),
+        });
+  }
 
-
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            // maxLines: 2,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Enter Text";
-                              } else {
-                                return null;
-                              }
-                            },
-                            controller: _payTextController,
-                            decoration: InputDecoration(
-                              hintText: '',
-                              labelText: 'আজকে পরিশোধ টাকার',
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 20.0),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.green, width: 1.0),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.green, width: 2.0),
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                            ),
-                          ),
-
-                          SizedBox(
-                            height: 20,
-                          ),
-                          InkWell(
-                            onTap: () {
-                              getImageGally();
-                            },
-                            child: Container(
-                              height: 100,
-                              // width: 100,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.green)),
-                              child: _image != null
-                                  ? Image.file(_image!.absolute)
-                                  : Center(child: Icon(Icons.image))
-                                  ,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Cancle")),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              TextButton(
-                                  onPressed: () async {
-                                    final f = new DateFormat('dd-MM-yyyy');
-                                    String todaydate = f.format(DateTime.now());
-                                    String payhistoryy = payhistory+' , '+todaydate+' = '+_payTextController.text;
-                                    if (_formKey.currentState!.validate()) {
-                                      // firebase_storage.Reference ref =
-                                      //     firebase_storage
-                                      //         .FirebaseStorage.instance
-                                      //         .ref('/kutub/' + id);
-                                      // firebase_storage.UploadTask uploadTask =
-                                      //     ref.putFile(_image!.absolute);
-                                      //
-                                      // await Future.value(uploadTask)
-                                      //     .then((value) async {
-                                      //   var newUrl = await ref.getDownloadURL();
-                                        databaseRef.child(id).update({
-                                          'duetotal': _dueTextController.text,
-                                          'payhistory': '${payhistoryy}',
-                                          //'image': newUrl.toString()
-                                        }).then((value) {
-                                          Utils().toastMessage("Post Update");
-                                          Navigator.pop(context);
-                                        }).onError((error, stackTrace) {
-                                          Utils()
-                                              .toastMessage(error.toString());
-                                        });
-                                      //});
-                                    }
-                                  },
-                                  child: Text("Update")),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+  Future<void> showVawcharDialog(String image) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          double height = MediaQuery.of(context).size.height;
+          double width = MediaQuery.of(context).size.width;
+          return Scaffold(
+            //appBar: AppBar(title: Text('name'),),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.white,
+                onPressed: (){
+                Navigator.pop(context);
+                },
+              child: Icon(Icons.cancel_sharp,color: Colors.red,size: 30,),
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                child: Image.network(
+                  image,
                 ),
-              ),
+              )
             ),
           );
         });
   }
 }
 
-
-
-
-          // Expanded(
-          //     child: StreamBuilder(
-          //   stream: databaseRef.onValue,
-          //   builder: ((context, AsyncSnapshot<DatabaseEvent> snapshot) {
-          //     if (!snapshot.hasData) {
-          //       return CircularProgressIndicator();
-          //     } else {
-          //       Map<dynamic, dynamic> map =
-          //           snapshot.data!.snapshot.value as dynamic;
-          //       List<dynamic> list = [];
-          //       list.clear();
-          //       list = map.values.toList();
-
-          //       return ListView.builder(
-          //         itemCount: snapshot.data!.snapshot.children.length,
-          //         itemBuilder: ((context, index) {
-          //           return ListTile(
-          //             title: Text(list[index]['title']),
-          //             subtitle: Text(list[index]['id']),
-          //           );
-          //         }),
-          //       );
-          //     }
-          //   }),
-          // )),
