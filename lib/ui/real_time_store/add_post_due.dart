@@ -54,7 +54,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Due Post"),
+        title: Text("বাকি তালিকা তৈরী করুন"),
         centerTitle: true,
       ),
       body: Padding(
@@ -81,6 +81,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _customerNameTextController,
                       decoration: InputDecoration(
                         hintText: 'ক্রেতার নাম',
+                        labelText: 'ক্রেতার নাম',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -111,6 +112,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _customerMobileTextController,
                       decoration: InputDecoration(
                         hintText: 'মোবাইল নং',
+                        labelText: 'মোবাইল নং',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -141,6 +143,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _customerVillageTextController,
                       decoration: InputDecoration(
                         hintText: 'গ্রামের নাম',
+                        labelText: 'গ্রামের নাম',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -171,6 +174,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _jamindarNameTextController,
                       decoration: InputDecoration(
                         hintText: 'জামিনদার',
+                        labelText: 'জামিনদার',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -201,6 +205,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _jamindarMobileTextController,
                       decoration: InputDecoration(
                         hintText: 'জামিনদার মোবাইল',
+                        labelText: 'জামিনদার মোবাইল',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -231,6 +236,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _payDateTextController,
                       decoration: InputDecoration(
                         hintText: 'পরিশোধ করবে যেই তারিখে',
+                        labelText: 'পরিশোধ করবে যেই তারিখে',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -261,6 +267,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       controller: _dueTextController,
                       decoration: InputDecoration(
                         hintText: 'বাকি টাকার পরিমান',
+                        labelText: 'বাকি টাকার পরিমান',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 20.0, horizontal: 20.0),
                         border: OutlineInputBorder(
@@ -301,7 +308,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               SizedBox(
                 height: 20,
               ),
-              RoundButton("Add", loading, () async {
+              RoundButton("সংরক্ষণ করুন ", loading, () async {
                 if (_formKey.currentState!.validate()) {
                   setState(() {
                     loading = true;
@@ -343,6 +350,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   });
                 }
               }),
+              SizedBox(
+                height: 20,
+              ),
             ],
           ),
         ),

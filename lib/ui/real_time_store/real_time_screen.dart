@@ -74,7 +74,7 @@ class _HomePostState extends State<HomePost> {
       appBar: AppBar(
         // ignore: prefer_const_literals_to_create_immutables
         automaticallyImplyLeading: true,
-        title: Text("Due"),
+        title: Text("বাকি তালিকা "),
         centerTitle: true,
         actions: [
           IconButton(
@@ -269,7 +269,7 @@ class _HomePostState extends State<HomePost> {
     _dueTextController.text = due;
     _initialdueTextController.text = initialdue;
     if(payhistory.length>0){
-      _duepayinfoTextController.text = payhistory.trim().substring(1).replaceAll(',', '\n');
+      _duepayinfoTextController.text = payhistory.trim().substring(1).replaceAll(',', '\n\n');
     }
     return showDialog(
         context: context,
@@ -298,6 +298,7 @@ class _HomePostState extends State<HomePost> {
                             }
                           },
                           controller: _initialdueTextController,
+                          style: TextStyle(fontSize: 20),
                           decoration: InputDecoration(
                             //enabled: false,
                             hintText: '',
@@ -326,8 +327,11 @@ class _HomePostState extends State<HomePost> {
                           height: 20,
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 20,color: Colors.black,),
+                          textAlign: TextAlign.center,
                           keyboardType: TextInputType.multiline,
-                          maxLines: 5,
+                          maxLines: 20,
+                          minLines: 5,
                           // validator: (value) {
                           //   if (value == null || value.isEmpty) {
                           //     return "Enter Text";
@@ -339,6 +343,7 @@ class _HomePostState extends State<HomePost> {
                           decoration: InputDecoration(
                             enabled: false,
                             hintText: '',
+                            labelStyle: TextStyle(fontSize: 20,color: Colors.black),
                             labelText: 'বাকি প্রদান তথ্য',
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 10.0, horizontal: 10.0),
@@ -364,6 +369,8 @@ class _HomePostState extends State<HomePost> {
                           height: 20,
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 20,color: Colors.black,),
+                          textAlign: TextAlign.center,
                           // maxLines: 2,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -374,7 +381,8 @@ class _HomePostState extends State<HomePost> {
                           },
                           controller: _dueTextController,
                           decoration: InputDecoration(
-                            //enabled: false,
+
+                            enabled: false,
                             hintText: '',
                             labelText: 'বর্তমান বাকি টাকা',
                             contentPadding: EdgeInsets.symmetric(
@@ -403,6 +411,7 @@ class _HomePostState extends State<HomePost> {
                           height: 20,
                         ),
                         TextFormField(
+                          style: TextStyle(fontSize: 20,color: Colors.black,),
                           // maxLines: 2,
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -440,22 +449,22 @@ class _HomePostState extends State<HomePost> {
                         SizedBox(
                           height: 20,
                         ),
-                        InkWell(
-                          onTap: () {
-                            getImageGally();
-                          },
-                          child: Container(
-                            height: 100,
-                            // width: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.green)),
-                            child: _image != null
-                                ? Image.file(_image!.absolute)
-                                : Center(child: Icon(Icons.image))
-                            ,
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     getImageGally();
+                        //   },
+                        //   child: Container(
+                        //     height: 100,
+                        //     // width: 100,
+                        //     decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         border: Border.all(color: Colors.green)),
+                        //     child: _image != null
+                        //         ? Image.file(_image!.absolute)
+                        //         : Center(child: Icon(Icons.image))
+                        //     ,
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 20,
                         ),
